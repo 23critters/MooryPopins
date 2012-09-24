@@ -1,0 +1,7 @@
+name: MooryPopins
+author: kunambi
+category: Widgets
+tags: [widget, popin, modal, iframe]
+current: v1.0
+copyright: "Thomas Kunambi, 23 Critters"
+description: Moory Popins is a nifty widget, written in MooTools framework, that allows you to show popin (modal) windows within a web page. Browsers that doesn't support CSS Transitions will utilize Javascript fading instead. Settings currently allow you to show the information in an Iframe or if you want the popin in a fixed position (follows the user when scrolling)

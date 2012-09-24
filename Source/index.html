@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>MooryPopins</title>
+<link rel="stylesheet" type="text/css" href="MooryPopins.css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.4/mootools-yui-compressed.js"></script>
+<script type="text/javascript" src="MooryPopins.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+window.addEvent("domready", function() {
+    var MP;
+    document.id("test1").addEvent("click", function(e) {
+        MP = new MooryPopins({
+            src: "MooryPopins.html",
+            iframe: true,
+            fixed: true
+        });
+
+        // change the source after 2secs
+        (function() {
+            MP.populate("MooryPopins.html");
+        }).delay(2000);
+    });
+});
+//]]>
+</script>
+</head>
+<body>
+    <p><a id="test1" href="javascript:;">Open Iframe popin!</a></p>
+</body>
+</html>
