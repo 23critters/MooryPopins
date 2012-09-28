@@ -12,8 +12,20 @@ window.addEvent("domready", function() {
     document.id("test1").addEvent("click", function(e) {
         MP = new MooryPopins({
             src: "MooryPopins.html",
-            iframe: true,
-            fixed: true
+            iframe: false,
+            fixed: true,
+            onShow: function() {
+                console.log("opening");
+            },
+            onLoad: function() {
+                console.log("loaded");
+            },
+            onClose: function() {
+                console.log("closing");
+            },
+            onChange: function() {
+                console.log("set new uri");
+            }
         });
 
         // change the source after 2secs

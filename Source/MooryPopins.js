@@ -14,8 +14,7 @@ authors:
   - kunambi
 
 requires:
-  - Core/Class
-  - Core/Element
+  - Core/Class.Extras
   - Core/Element.Event
   - Core/Fx.Tween
   - Core/Request.HTML
@@ -26,18 +25,26 @@ provides: [MooryPopins]
 */
 
 var MooryPopins = new Class({
-    Implements: Options,
+    Implements: [Options, Events],
     options: {
         iframe: false,
         fixed: false,
         src: "about:blank",
         duration: 250,
+        /**
+         @since 1.1
+         * */
+        framename: "uniquemoorypopinname",
         css: {
             id: "overlay-popin",
             cu: "ease",
             cl: "close",
             lo: "loading"
-        }
+        },
+        onShow: function() {},
+        onLoad: function() {},
+        onChange: function() {},
+        onClose: function() {}
     },
     /**
      @constructor
@@ -61,7 +68,7 @@ var MooryPopins = new Class({
             }
         }).inject(document.body, "top");
 
-        if (this._hasTransition()) {
+        if (this.hasTransition()) {
             this._setTransition();
             (function() {
                 this.setStyle("opacity", 1);
@@ -100,27 +107,31 @@ var MooryPopins = new Class({
         this.populate(this.options.src);
     },
     /**
-     @protected
+     @public
      @return {void}
      @description Populates the Section with data, either an Iframe or a Div with XHR-data
      @param {String} The URL to show/fetch data from
      @since 1.0
      */
     populate: function(sURL) {
-        var sUID = "uniquemoorypopinname";
+        var sUID = this.options.framename,
+            oElement;
         if (this.options.iframe) {
-            if (document.id(sUID)) {
-                document.id(sUID).set("src", sURL);
+            if (oElement = document.id(sUID)) {
+                oElement.set("src", sURL);
+                this.change();
             } else {
                 new IFrame({
                     "id": sUID,
                     "src": sURL,
                     "events": {
                         "load": function() {
+                            this.load();
                             document.body.removeClass(this.options.css.lo);
                         }.bind(this)
                     }
                 }).inject(this.section);
+                this.show();
             }
         } else {
             new Request.HTML({
@@ -130,14 +141,17 @@ var MooryPopins = new Class({
                     "X-HTTP-XHR": true
                 },
                 "onSuccess": function(tree, elems, HTML, JS) {
-                    if (document.id(sUID)) {
-                        document.id(sUID).set("html", HTML);
+                    if (oElement = document.id(sUID)) {
+                        oElement.set("html", HTML);
+                        this.change();
                     } else {
                         new Element("div", {
                             "id": sUID,
                             "html": HTML
                         }).inject(this.section);
+                        this.show();
                     }
+                    this.load();
                     document.body.removeClass(this.options.css.lo);
                 }.bind(this)
             }).send();
@@ -158,29 +172,29 @@ var MooryPopins = new Class({
         }
     },
     /**
-     @protected
+     @public
      @return {String}
      @description Returns the prefix associated with the current browser brand
      @since 1.0
      */
-    _getPrefix: function() {
-        var sPrefix = "";
+    getPrefix: function() {
+        var sVendorPrefix = "";
         switch(Browser.name) {
             case "safari":
             case "chrome":
-                sPrefix = "webkit";
+                sVendorPrefix = "webkit";
                 break;
             case "firefox":
-                sPrefix = "moz";
+                sVendorPrefix = "moz";
                 break;
             case "ie":
-                sPrefix = "ms";
+                sVendorPrefix = "ms";
                 break;
             case "opera":
-                sPrefix = "o";
+                sVendorPrefix = "o";
                 break;
         }
-        return sPrefix;
+        return "-" + sVendorPrefix + "-";
     },
     /**
      @protected
@@ -189,15 +203,15 @@ var MooryPopins = new Class({
      @since 1.0
      */
     _setTransition: function() {
-        this.overlay.setStyle("-" + this._getPrefix() + "-transition", "opacity " + ((this.options.duration/1000).round(2)) + "s "+ this.options.css.cu);
+        this.overlay.setStyle(this.getPrefix() + "transition", "opacity " + ((this.options.duration/1000).round(2)) + "s "+ this.options.css.cu);
     },
     /**
-     @protected
+     @public
      @return {Boolean}
      @description Checks wether the browser is CSS Transform capable
      @since 1.0
      */
-    _hasTransition: function() {
+    hasTransition: function() {
         var oEl = document.documentElement, s;
         if (oEl && (s = oEl.style)) {
             return typeof s.WebkitTransform == "string" ||
@@ -216,20 +230,54 @@ var MooryPopins = new Class({
      @param {Function} Callback function to execute when HTML Object has been removed
      @since 1.0
      */
-    _close: function(obj, fnCallback) {
-        var obj = document.id(obj);
-        if (obj) {
-            if (this._hasTransition()) {
-                obj.setStyle("opacity", 0);
+    _close: function(obj) {
+        var oObj = document.id(obj);
+        if (oObj) {
+            if (this.hasTransition()) {
+                oObj.setStyle("opacity", 0);
             } else {
-                obj.fade("out");
+                oObj.fade("out");
             }
             (function() {
-                obj.dispose();
-                if (fnCallback) {
-                    fnCallback();
-                }
-            }).delay(this.options.duration, this)
+                oObj.dispose();
+            }).delay(this.options.duration, this);
+            this.close();
         }
+    },
+    /**
+     @public
+     @return {void}
+     @description Triggers callback when the user opens popin
+     @since 1.1
+     */
+    show: function() {
+        this.fireEvent("show");
+    },
+    /**
+     @public
+     @return {void}
+     @description Triggers callback when the request has loaded
+     @since 1.1
+     */
+    load: function() {
+        this.fireEvent("load");
+    },
+    /**
+     @public
+     @return {void}
+     @description Triggers callback when user sets new source of the popin
+     @since 1.1
+     */
+    change: function() {
+        this.fireEvent("change");
+    },
+    /**
+     @public
+     @return {void}
+     @description Triggers callback when the user closes popin
+     @since 1.1
+     */
+    close: function() {
+        this.fireEvent("close");
     }
 });
