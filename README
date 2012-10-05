@@ -31,9 +31,10 @@ Javascript snippet to initialize the class:
 	});
 
 
-CSS selector to style the overlay and its children, eg:
+CSS selector to style the overlay and its siblings, eg:
 
 	ARTICLE#overlay-popin {}
+	ARTICLE#overlay-popin + SECTION {}
 
 Options
 -----------------
@@ -60,6 +61,12 @@ The following methods are availible publicly:
 
 Version history
 -----------------
+Version 1.2
+
+    * Fixed bug with position fixed/absolute. Moved the section-layer outside the overlay
+    * Added a private method to display objects
+    * Added some nicer CSS for when the popin fades in/out.
+
 Version 1.1
 
     * Added multiple callbacks that you can set via options; onShow, onLoad, onChange, onClose.

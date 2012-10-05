@@ -39,7 +39,11 @@ var MooryPopins = new Class({
             id: "overlay-popin",
             cu: "ease",
             cl: "close",
-            lo: "loading"
+            lo: "loading",
+            /**
+             @since 1.2
+             * */
+            pr: "preload"
         },
         onShow: function() {},
         onLoad: function() {},
@@ -63,19 +67,13 @@ var MooryPopins = new Class({
                     e.preventDefault();
                     if (e.target === this.overlay) {
                         this._close(this.overlay);
+                        this._close(this.section);
                     }
                 }.bind(this)
             }
         }).inject(document.body, "top");
 
-        if (this.hasTransition()) {
-            this._setTransition();
-            (function() {
-                this.setStyle("opacity", 1);
-            }).delay(5, this.overlay);
-        } else {
-            this.overlay.fade("in");
-        }
+        this._display(this.overlay);
 
         this.keydown = this._keydown.bind(this);
         document.addEvent("keydown", this.keydown);
@@ -90,16 +88,18 @@ var MooryPopins = new Class({
      */
     _setup: function() {
         document.body.addClass(this.options.css.lo);
-        this.section = new Element("section", {
+        this.section = new Element("section." + this.options.css.pr, {
             styles: {
-                "position": this.options.fixed?"fixed":"relative"
+                "position": this.options.fixed?"fixed":"absolute",
+                "top": this.options.fixed?0:window.getScroll().y
             }
-        }).inject(this.overlay).adopt(
+        }).inject(this.overlay, "after").adopt(
             new Element("button", {
                 "class": this.options.css.cl,
                 "events": {
                     "click": function(e) {
                         this._close(this.overlay);
+                        this._close(this.section);
                     }.bind(this)
                 }
             })
@@ -131,7 +131,7 @@ var MooryPopins = new Class({
                         }.bind(this)
                     }
                 }).inject(this.section);
-                this.show();
+                this._display(this.section);
             }
         } else {
             new Request.HTML({
@@ -149,13 +149,34 @@ var MooryPopins = new Class({
                             "id": sUID,
                             "html": HTML
                         }).inject(this.section);
-                        this.show();
+                        this._display(this.section);
                     }
                     this.load();
                     document.body.removeClass(this.options.css.lo);
                 }.bind(this)
             }).send();
         }
+    },
+    /**
+     @protected
+     @return {void}
+     @description Display/animate the popin when the contents has loaded
+     @param The object to fade in
+     @since 1.2
+     */
+    _display: function(obj) {
+        if (this.hasTransition()) {
+            this._setTransition(obj);
+            (function() {
+                this.setStyle("opacity", 1);
+            }).delay(5, obj);
+        } else {
+            obj.fade("in");
+        }
+        if (obj === this.section) {
+            this.section.removeClass(this.options.css.pr);
+        }
+        this.show();
     },
     /**
      @protected
@@ -168,6 +189,7 @@ var MooryPopins = new Class({
         var eEvent = e || window.event;
         if (eEvent.key === "esc") {
             this._close(this.overlay);
+            this._close(this.section);
             document.removeEvent("keydown", this.keydown);
         }
     },
@@ -202,8 +224,8 @@ var MooryPopins = new Class({
      @description Sets inline CSS transition on the overlay
      @since 1.0
      */
-    _setTransition: function() {
-        this.overlay.setStyle(this.getPrefix() + "transition", "opacity " + ((this.options.duration/1000).round(2)) + "s "+ this.options.css.cu);
+    _setTransition: function(obj) {
+        obj.setStyle(this.getPrefix() + "transition", "all " + this.options.duration + "ms "+ this.options.css.cu);
     },
     /**
      @public
@@ -231,15 +253,15 @@ var MooryPopins = new Class({
      @since 1.0
      */
     _close: function(obj) {
-        var oObj = document.id(obj);
-        if (oObj) {
+        if (obj) {
+            this.section.addClass(this.options.css.pr);
             if (this.hasTransition()) {
-                oObj.setStyle("opacity", 0);
+                obj.setStyle("opacity", 0);
             } else {
-                oObj.fade("out");
+                obj.fade("out");
             }
             (function() {
-                oObj.dispose();
+                obj.dispose();
             }).delay(this.options.duration, this);
             this.close();
         }

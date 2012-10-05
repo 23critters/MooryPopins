@@ -16,15 +16,30 @@ ARTICLE#overlay-popin {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACRJREFUeNpiYWBgaGCgImBioDIYNXDUwFEDRw0cNXCoGAgQYADADQCraWCIjwAAAABJRU5ErkJggg==) repeat left top;
     opacity: 0;
 }
-ARTICLE#overlay-popin > SECTION {
+ARTICLE#overlay-popin + SECTION {
+	z-index: 100000;
     width: 400px;
     height: 400px;
-    position: relative;
-    margin: 10% auto 0;
+    position: absolute;
+    margin: 5% auto 0;
     left: 0;
     right: 0;
+	opacity: 0;
 }
-ARTICLE#overlay-popin > SECTION > BUTTON.close {
+ARTICLE#overlay-popin + SECTION.preload {
+	-webkit-transform: scale(0.75);
+	-o-transform: scale(0.75);
+	-ms-transform: scale(0.75);
+	-moz-transform: scale(0.75);
+	transform: scale(0.75);
+	-webkit-transform-origin: 50% 50%;
+	-o-transform-origin: 50% 50%;
+	-ms-transform-origin: 50% 50%;
+	-moz-transform-origin: 50% 50%;
+	-khtml-transform-origin: 50% 50%;
+	transform-origin: 50% 50%; 
+}
+ARTICLE#overlay-popin + SECTION > BUTTON.close {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAdCAYAAABWk2cPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAiZJREFUeNq8l81Kw0AQx7NJ60fFbyrEkIvtQegl6M1bQejJPkSlV5/BB/DUa6Ev0avQeynoUbTgoShF0fpZsZrojMxKjZvNxqYO/Chkp/PP7M7uTpimZglgDlgEJoAk8UYMgB7wALyHBWMh45PAKrCkqdstcAm8RhXVAQtIK7yYyD6Aa+AC8FREcdqyQEob3fpAm5bg2wzB2q0D01o8hgks0JR7IlEWY4b+RGZI+JeoHbFgotgkaT3wgtEou7Q2XkvzWeSipqxKG43GTrVadWQRcRz9QranObzYG8CmCAi0/wHmuu4zBN4V+eBzHEc/9A+KRToJnrbQqVAo5HmwIOFhQe6D/5MIf9VNRuIgDMqFZWMS1lA0F+IkDN5sNg/+IIjkDDrudFmR1Ov1rm3bR47jbDPGkohlWVv4i+Oe5/VrtdpeuVw+VqhixkVDzS/Mn0cU/NoxmKGr/a+5mOkyL+OwfVgqlSq6rv84JjFrzB5nAWdDQXRg0OU8FUUQp7TValVM03T4GkcQfjQoy/kogriGxWLx0F9cisJd6Yk0hsNhY3gpM/90DGaGO4cUXd4s6MBvt9sd2bbAZchms3Y+n69LWpgT7CaY7z5dGeNWuQI6/kv8EZilFjNuewLOg3qke+ptEzEKYit6FtQjaTTQo72bjEHwBTj1N+CGwBGFb2gsNWLfey46ZlU6fIumXNV61GRH7vBFbeQ89bBB3zJ3VBOh3zKfAgwAVzp5MTohr5UAAAAASUVORK5CYII=) no-repeat left top;
     display: block;
     width: 29px;
@@ -36,8 +51,8 @@ ARTICLE#overlay-popin > SECTION > BUTTON.close {
     top: -14px;
     cursor: pointer;
 }
-ARTICLE#overlay-popin > SECTION > IFRAME,
-ARTICLE#overlay-popin > SECTION > DIV {
+ARTICLE#overlay-popin + SECTION > IFRAME,
+ARTICLE#overlay-popin + SECTION > DIV {
     width: 100%;
     height: 100%;
     border: 0 none;
