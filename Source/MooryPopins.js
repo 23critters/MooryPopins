@@ -35,6 +35,7 @@ var MooryPopins = new Class({
          @since 1.1
          * */
         framename: "uniquemoorypopinname",
+		cssClass: "",
         css: {
             id: "overlay-popin",
             cu: "ease",
@@ -88,8 +89,9 @@ var MooryPopins = new Class({
      */
     _setup: function() {
         document.body.addClass(this.options.css.lo);
-        this.section = new Element("section." + this.options.css.pr, {
-            styles: {
+        this.section = new Element("section", {
+            "class": this.options.cssClass + " " + this.options.css.pr,
+            "styles": {
                 "position": this.options.fixed?"fixed":"absolute",
                 "top": this.options.fixed?0:window.getScroll().y
             }

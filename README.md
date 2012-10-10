@@ -42,6 +42,7 @@ Options
     fixed:      (boolean) Does the popin have a fixed position? If yes, it will follow the user when scrolling | default: false
     src:        (string) Path to the resource you want to display | default: "about:blank"
     duration:   (integer) How long should the transitions take? In milliseconds. | default: 250
+	cssClass:	(string) If you want to supply an additional css-class to the <section> | default: ""
     css:        (object) Some default CSS class-/id-names that are used. Change these if they're conflicting with your webpage
     onShow:     Triggers callback when the user opens popin
     onLoad:     Triggers callback when the request has loaded
@@ -61,6 +62,10 @@ The following methods are availible publicly:
 
 Version history
 -----------------
+Version 1.3
+
+	* Added option cssClass, easier to allow different styling for different modals
+
 Version 1.2
 
     * Fixed bug with position fixed/absolute. Moved the section-layer outside the overlay
