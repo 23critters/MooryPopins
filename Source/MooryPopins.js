@@ -36,6 +36,9 @@ var MooryPopins = new Class({
          * */
         framename: "uniquemoorypopinname",
 		cssClass: "",
+        /**
+         @since 1.3
+         * */
         css: {
             id: "overlay-popin",
             cu: "ease",
@@ -46,6 +49,24 @@ var MooryPopins = new Class({
              * */
             pr: "preload"
         },
+        /**
+         @since 1.4
+         * */
+        position: {
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0
+        },
+        /**
+         @since 1.4
+         * */
+        offset: {
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0
+        },
         onShow: function() {},
         onLoad: function() {},
         onChange: function() {},
@@ -54,7 +75,7 @@ var MooryPopins = new Class({
     /**
      @constructor
      @this {MooryPopins}
-     @param {Array} Options for behaviours for the displaying the popin/modal
+     @param {Array} options for behaviours for the displaying the popin/modal
      @author Thomas Kunambi
      @version 1.0
      */
@@ -93,7 +114,7 @@ var MooryPopins = new Class({
             "class": this.options.cssClass + " " + this.options.css.pr,
             "styles": {
                 "position": this.options.fixed?"fixed":"absolute",
-                "top": this.options.fixed?0:window.getScroll().y
+                "top": this.options.fixed?this.options.position.top:window.getScroll().y + this.options.offset.top
             }
         }).inject(this.overlay, "after").adopt(
             new Element("button", {
@@ -112,20 +133,20 @@ var MooryPopins = new Class({
      @public
      @return {void}
      @description Populates the Section with data, either an Iframe or a Div with XHR-data
-     @param {String} The URL to show/fetch data from
+     @param {String} url to show/fetch data from
      @since 1.0
      */
-    populate: function(sURL) {
+    populate: function(url) {
         var sUID = this.options.framename,
             oElement;
         if (this.options.iframe) {
             if (oElement = document.id(sUID)) {
-                oElement.set("src", sURL);
+                oElement.set("src", url);
                 this.change();
             } else {
                 new IFrame({
                     "id": sUID,
-                    "src": sURL,
+                    "src": url,
                     "events": {
                         "load": function() {
                             this.load();
@@ -137,7 +158,7 @@ var MooryPopins = new Class({
             }
         } else {
             new Request.HTML({
-                "url": sURL,
+                "url": url,
                 "method": "get",
                 "headers": {
                     "X-HTTP-XHR": true
@@ -163,7 +184,7 @@ var MooryPopins = new Class({
      @protected
      @return {void}
      @description Display/animate the popin when the contents has loaded
-     @param The object to fade in
+     @param obj to fade in
      @since 1.2
      */
     _display: function(obj) {
@@ -184,7 +205,7 @@ var MooryPopins = new Class({
      @protected
      @return {void}
      @description Allow the overlay to close when user is hitting the Escape key
-     @param {Event} Keystrikes to listen to
+     @param {Event} e is the Event to listen to
      @since 1.0
      */
     _keydown: function(e) {
@@ -224,6 +245,7 @@ var MooryPopins = new Class({
      @protected
      @return {void}
      @description Sets inline CSS transition on the overlay
+     @param {Object} obj to attach style information to
      @since 1.0
      */
     _setTransition: function(obj) {
@@ -250,8 +272,7 @@ var MooryPopins = new Class({
      @protected
      @return {void}
      @description Sets an objects opacity to 0, then removes it from DOM after default specified time
-     @param {Object} HTML Object to remove
-     @param {Function} Callback function to execute when HTML Object has been removed
+     @param {Object} obj to remove
      @since 1.0
      */
     _close: function(obj) {

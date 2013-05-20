@@ -44,6 +44,8 @@ Options
     duration:   (integer) How long should the transitions take? In milliseconds. | default: 250
 	cssClass:	(string) If you want to supply an additional css-class to the <section> | default: ""
     css:        (object) Some default CSS class-/id-names that are used. Change these if they're conflicting with your webpage
+	position:	(object) If you want to set the position of the SECTION, currently only the key "top" is used. | default: 0
+	offset:		(object) If you want to offset the position of the SECTION, currently only the key "top" is used. | default: 0
     onShow:     Triggers callback when the user opens popin
     onLoad:     Triggers callback when the request has loaded
     onChange:   Triggers callback when user sets new source of the popin
@@ -62,6 +64,10 @@ The following methods are availible publicly:
 
 Version history
 -----------------
+Version 1.4
+
+	* Added option ´position´ and ´offset´ making it slightly easier to move the modal box
+
 Version 1.3
 
 	* Added option cssClass, easier to allow different styling for different modals
