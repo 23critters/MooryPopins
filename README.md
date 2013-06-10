@@ -59,11 +59,17 @@ The following methods are availible publicly:
 
     populate: takes string and fetches resource to display in the popin
     hasTransition: returns boolean for wether the browser supports CSS Transitions or not
+	closeObj: closes and disposes the passed object
     getPrefix: returns the browser vendor prefix
 
 
 Version history
 -----------------
+Version 1.4.1
+
+	* Updated inline docs
+	* Refactored _close to closeObj
+
 Version 1.4
 
 	* Added option ´position´ and ´offset´ making it slightly easier to move the modal box

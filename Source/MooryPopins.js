@@ -36,9 +36,9 @@ var MooryPopins = new Class({
          * */
         framename: "uniquemoorypopinname",
 		cssClass: "",
-        /**
-         @since 1.3
-         * */
+
+
+
         css: {
             id: "overlay-popin",
             cu: "ease",
@@ -50,7 +50,7 @@ var MooryPopins = new Class({
             pr: "preload"
         },
         /**
-         @since 1.4
+         @since 1.2
          * */
         position: {
             top: 0,
@@ -59,7 +59,7 @@ var MooryPopins = new Class({
             bottom: 0
         },
         /**
-         @since 1.4
+         @since 1.2
          * */
         offset: {
             top: 0,
@@ -88,8 +88,8 @@ var MooryPopins = new Class({
                 "click": function(e) {
                     e.preventDefault();
                     if (e.target === this.overlay) {
-                        this._close(this.overlay);
-                        this._close(this.section);
+                        this.closeObj(this.overlay);
+                        this.closeObj(this.section);
                     }
                 }.bind(this)
             }
@@ -121,8 +121,8 @@ var MooryPopins = new Class({
                 "class": this.options.css.cl,
                 "events": {
                     "click": function(e) {
-                        this._close(this.overlay);
-                        this._close(this.section);
+                        this.closeObj(this.overlay);
+                        this.closeObj(this.section);
                     }.bind(this)
                 }
             })
@@ -211,8 +211,8 @@ var MooryPopins = new Class({
     _keydown: function(e) {
         var eEvent = e || window.event;
         if (eEvent.key === "esc") {
-            this._close(this.overlay);
-            this._close(this.section);
+            this.closeObj(this.overlay);
+            this.closeObj(this.section);
             document.removeEvent("keydown", this.keydown);
         }
     },
@@ -269,13 +269,13 @@ var MooryPopins = new Class({
         return false;
     },
     /**
-     @protected
+     @public
      @return {void}
      @description Sets an objects opacity to 0, then removes it from DOM after default specified time
      @param {Object} obj to remove
      @since 1.0
      */
-    _close: function(obj) {
+    closeObj: function(obj) {
         if (obj) {
             this.section.addClass(this.options.css.pr);
             if (this.hasTransition()) {
