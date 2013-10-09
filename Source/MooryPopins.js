@@ -36,9 +36,6 @@ var MooryPopins = new Class({
          * */
         framename: "uniquemoorypopinname",
 		cssClass: "",
-
-
-
         css: {
             id: "overlay-popin",
             cu: "ease",
@@ -67,6 +64,10 @@ var MooryPopins = new Class({
             right: 0,
             bottom: 0
         },
+        /**
+         @since 1.4.5
+         */
+        evalScript: true,
         onShow: function() {},
         onLoad: function() {},
         onChange: function() {},
@@ -82,6 +83,7 @@ var MooryPopins = new Class({
     initialize: function(options) {
         this.setOptions(options);
 
+        this.body = document.id(document.body);
         this.overlay = new Element("article", {
             "id": this.options.css.id,
             "events": {
@@ -93,7 +95,7 @@ var MooryPopins = new Class({
                     }
                 }.bind(this)
             }
-        }).inject(document.body, "top");
+        }).inject(this.body, "top");
 
         this._display(this.overlay);
 
@@ -109,7 +111,7 @@ var MooryPopins = new Class({
      @since 1.0
      */
     _setup: function() {
-        document.body.addClass(this.options.css.lo);
+        this.body.addClass(this.options.css.lo);
         this.section = new Element("section", {
             "class": this.options.cssClass + " " + this.options.css.pr,
             "styles": {
@@ -150,7 +152,7 @@ var MooryPopins = new Class({
                     "events": {
                         "load": function() {
                             this.load();
-                            document.body.removeClass(this.options.css.lo);
+                            this.body.removeClass(this.options.css.lo);
                         }.bind(this)
                     }
                 }).inject(this.section);
@@ -160,6 +162,7 @@ var MooryPopins = new Class({
             new Request.HTML({
                 "url": url,
                 "method": "get",
+                "evalScripts": this.options.evalScript,
                 "headers": {
                     "X-HTTP-XHR": true
                 },
@@ -175,7 +178,7 @@ var MooryPopins = new Class({
                         this._display(this.section);
                     }
                     this.load();
-                    document.body.removeClass(this.options.css.lo);
+                    this.body.removeClass(this.options.css.lo);
                 }.bind(this)
             }).send();
         }

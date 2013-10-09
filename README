@@ -46,6 +46,7 @@ Options
     css:        (object) Some default CSS class-/id-names that are used. Change these if they're conflicting with your webpage
 	position:	(object) If you want to set the position of the SECTION, currently only the key "top" is used. | default: 0
 	offset:		(object) If you want to offset the position of the SECTION, currently only the key "top" is used. | default: 0
+	evalScript: (boolean) If you want to evaluate javascript in the HTML-response. Only used when "iframe" is false | default: true
     onShow:     Triggers callback when the user opens popin
     onLoad:     Triggers callback when the request has loaded
     onChange:   Triggers callback when user sets new source of the popin
@@ -62,9 +63,19 @@ The following methods are availible publicly:
 	closeObj: closes and disposes the passed object
     getPrefix: returns the browser vendor prefix
 
+JS Fiddle
+-----------------
+JS Fiddle can be found here: http://jsfiddle.net/gn5U6/
+However, it doesn't seem to work well with cross-site ajax requests, nor opening iframes within iframes. But at least it's up there.
+
 
 Version history
 -----------------
+Version 1.4.5
+
+	* Added option evalScript, wether to evaluate javascript in the HTML-response
+	* Hopefully squashed the last bugs in IE8
+
 Version 1.4.1
 
 	* Updated inline docs
