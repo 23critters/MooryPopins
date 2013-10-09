@@ -66,6 +66,7 @@ The following methods are availible publicly:
 JS Fiddle
 -----------------
 JS Fiddle can be found here: http://jsfiddle.net/gn5U6/
+
 However, it doesn't seem to work well with cross-site ajax requests, nor opening iframes within iframes. But at least it's up there.
 
 
@@ -83,7 +84,7 @@ Version 1.4.1
 
 Version 1.4
 
-	* Added option ´position´ and ´offset´ making it slightly easier to move the modal box
+	* Added option "position" and "offset" making it slightly easier to move the modal box
 
 Version 1.3
 
